@@ -4,7 +4,14 @@
 #![deny(missing_docs)]
 
 use colored::Colorize;
-use zxcvbn::{Entropy, Match, Score, Format};
+use zxcvbn::{Entropy, Match, Score};
+
+/// Output format
+#[warn(missing_docs)]
+pub enum Format {
+    Json,
+    Text,
+}
 
 macro_rules! info {
     ($name:expr) => {
@@ -25,7 +32,7 @@ pub fn run(password: &str, hide_password: bool, mut format: Option<Format>) -> R
         return Err("empty password".into());
     }
 
-    let entropy = zxcvbn::zxcvbn(password, &[], format);
+    let entropy = zxcvbn::zxcvbn(password, &[]);
 
     print!("{} ", "➜".magenta());
     if hide_password {

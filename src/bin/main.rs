@@ -1,7 +1,7 @@
 use clap::{crate_authors, crate_description, crate_name, crate_version, Arg, Command};
 use colored::Colorize;
 use crossterm::{cursor, QueueableCommand};
-use zxcvbn::Format;
+use zxcvbn_cli::Format;
 use std::io::{self, Write};
 
 fn main() {
