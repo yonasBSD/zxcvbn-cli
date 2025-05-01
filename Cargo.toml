@@ -17,7 +17,7 @@ path = "src/bin/main.rs"
 name = "zxcvbn"
 
 [dependencies]
-zxcvbn = { version = "^3.1", features = ["ser"], path = "../zxcvbn-rs" }
+zxcvbn = { features = ["ser"], git = "https://github.com/yonasBSD/zxcvbn-rs", branch = "yonasBSD" }
 clap = { version = "^4.1", features = ["cargo"] }
 colored = "^2.0"
 rpassword = "^7.2"

@@ -996,6 +996,7 @@ checksum = "589f6da84c646204747d1270a2a5661ea66ed1cced2631d546fdfb155959f9ec"
 [[package]]
 name = "zxcvbn"
 version = "3.1.0"
+source = "git+https://github.com/yonasBSD/zxcvbn-rs?branch=yonasBSD#38410db8a6436f97cba2afbfc0a09e2b8255f4b7"
 dependencies = [
  "chrono",
  "derive_builder",
