@@ -1,6 +1,7 @@
 use clap::{crate_authors, crate_description, crate_name, crate_version, Arg, Command};
 use colored::Colorize;
 use crossterm::{cursor, QueueableCommand};
+use zxcvbn::Format;
 use std::io::{self, Write};
 
 fn main() {
@@ -49,10 +50,15 @@ fn main() {
     };
 
     let hide_password = matches.get_one::<bool>("secure").copied().unwrap_or(false);
-    let format = matches.get_one::<String>("format").clone();
+    let format_str = matches.get_one::<String>("format").clone();
 
-    //if let Err(e) = zxcvbn_cli::run(password.as_str(), hide_password, format) {
-    if let Err(e) = zxcvbn_cli::run(password.as_str(), hide_password) {
+    let format: Option<Format> = match format_str.unwrap().as_str() {
+        "json" => Some(Format::Json),
+        "text" => Some(Format::Text),
+        &_ => todo!(),
+    };
+
+    if let Err(e) = zxcvbn_cli::run(password.as_str(), hide_password, format) {
         eprintln!("{} {}", "error:".red().bold(), e);
     }
 }
