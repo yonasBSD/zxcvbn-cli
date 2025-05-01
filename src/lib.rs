@@ -34,33 +34,40 @@ pub fn run(password: &str, hide_password: bool, mut format: Option<Format>) -> R
 
     let entropy = zxcvbn::zxcvbn(password, &[]);
 
-    print!("{} ", "➜".magenta());
-    if hide_password {
-        print!("{}", "<hidden>".magenta());
-    } else {
-        print_password_tokenized(&entropy);
+    match format.unwrap() {
+        Format::Json => {
+            let serialized_entropy = serde_json::to_string(&entropy).unwrap();
+            println!("{}", serialized_entropy);
+        },
+        Format::Text => {
+            print!("{} ", "➜".magenta());
+            if hide_password {
+                print!("{}", "<hidden>".magenta());
+            } else {
+                print_password_tokenized(&entropy);
+            }
+            println!();
+
+            main_information(&entropy);
+            guesses(&entropy);
+            crack_time(&entropy);
+
+            if !hide_password {
+                info!("sequence");
+                sequence(entropy.sequence(), 0);
+            }
+
+            println!();
+            println!(
+                "{}",
+                format!(
+                    "zxcvbn done in {} ms",
+                    entropy.calculation_time().as_millis()
+                )
+                .bright_black()
+            );
+        }
     }
-    println!();
-
-    main_information(&entropy);
-    guesses(&entropy);
-    crack_time(&entropy);
-
-    if !hide_password {
-        info!("sequence");
-        sequence(entropy.sequence(), 0);
-    }
-
-    println!();
-    println!(
-        "{}",
-        format!(
-            "zxcvbn done in {} ms",
-            entropy.calculation_time().as_millis()
-        )
-        .bright_black()
-    );
-
     Ok(())
 }
 
