@@ -20,6 +20,14 @@ fn main() {
                 .action(clap::ArgAction::SetTrue)
                 .help("Do not output password and sequence."),
         )
+        .arg(
+            Arg::new("format")
+                .short('f')
+                .long("format")
+                .value_parser(["json", "text"])
+                .default_value("text")
+                .help("Output format."),
+        )
         .get_matches();
 
     let password = match matches.get_one::<String>("password") {
@@ -41,7 +49,9 @@ fn main() {
     };
 
     let hide_password = matches.get_one::<bool>("secure").copied().unwrap_or(false);
+    let format = matches.get_one::<String>("format").clone();
 
+    //if let Err(e) = zxcvbn_cli::run(password.as_str(), hide_password, format) {
     if let Err(e) = zxcvbn_cli::run(password.as_str(), hide_password) {
         eprintln!("{} {}", "error:".red().bold(), e);
     }

@@ -4,7 +4,8 @@
 #![deny(missing_docs)]
 
 use colored::Colorize;
-use zxcvbn::{Entropy, Match};
+//use zxcvbn::{Entropy, Match, Format};
+use zxcvbn::{Entropy, Match, Score};
 
 macro_rules! info {
     ($name:expr) => {
@@ -16,12 +17,15 @@ macro_rules! info {
 }
 
 /// Runs the main logic of the app.
+//pub fn run(password: &str, hide_password: bool, format: Option<Format>) -> Result<(), String> {
 pub fn run(password: &str, hide_password: bool) -> Result<(), String> {
     if password.is_empty() {
         return Err("empty password".into());
     }
 
-    let entropy = zxcvbn::zxcvbn(password, &[]).unwrap();
+    //let entropy = zxcvbn::zxcvbn(password, &[], format).unwrap();
+    //let entropy = zxcvbn::zxcvbn(password, &[]).unwrap();
+    let entropy = zxcvbn::zxcvbn(password, &[]);
 
     print!("{} ", "➜".magenta());
     if hide_password {
@@ -72,11 +76,11 @@ fn main_information(entropy: &Entropy) {
         format!(
             "{}{}",
             match entropy.score() {
-                0 => "0".bright_red(),
-                1 => "1".red(),
-                2 => "2".yellow(),
-                3 => "3".green(),
-                4 => "4".bright_green(),
+                Score::Zero => "0".bright_red(),
+                Score::One => "1".red(),
+                Score::Two => "2".yellow(),
+                Score::Three => "3".green(),
+                Score::Four => "4".bright_green(),
                 _ => unreachable!(),
             },
             " / 4"
